@@ -11,9 +11,62 @@ var words = [
   'ukulele',
   'mango'
 ]
+/*
+Possible Global Variables
+var randomWord
+var wordToGuess
+var remainingGuesses
+
+var currentWord
+var incorrectLetters
+var previousWordEl
+var incorrectLettersEl
+var remainingGuessesEl
+var correct = 0
+var incorrect = 0
+*/
+
+// list global variables
+var wordToGuess = document.getElementById("word-to-guess")
+var wordDisp = document.getElementById('words')
+var remainingGuesses = document.getElementById("remaining-guesses")
+
+// on page load, select a word at random from words array 
+window.onload = function(pageLoad)
+{
+  var randomWord = pageLoad.words[Math.floor(Math.random() * words.length)]
+  // place randomly generated word into the #word-to-guess element
+  wordToGuess.textContent = randomWord
+  // display letters as underscores
+  wordDisp.textContent = words.replace(/\s+/g, "_");
+  // display 10 remaining guesses in the #remaining-guesses element
+  remainingGuesses.textContent = 10
+  
+}
 
 /*
-PROF TIPS
+// filter keypresses
+document.onkeyup = function(userEvent)
+{
+  var key = userEvent.key.toLowerCase()
+  if (words.indexOf(key) == -1) return
+
+}
+
+// compare user input to letters in randomWord
+
+// If the letter is included, replace the underscores displayed in the #word-to-guess element) with the instances of that letter
+
+// If the letter is not included, the #word-to-guess element should remain unchanged, but the incorrectly-guessed letter should be added to the #incorrect-letters element and the #remaining-guesses element should reflect one fewer remaining guess.
+
+// If the user presses a non-letter key or the 'k' key repeatedly, there should be NO changes to the game state
+
+// If user wins round, the game should increase win++ in the #wins element. The game should immediately proceed to the next randomly-chosen word and reset all of the other elements: incorrect letters should be blank, remaining guesses should show '10', and the #previous-word element should read the word from the previous round.
+
+// If user loses round, the game should proceed to the next round and show an increase in losses++ 
+
+/*
+TIPS
 Both arrays and strings have an "includes" method that return true/false.
 
 It may be helpful to create arrays for incorrect letters AND correct letters.
@@ -23,50 +76,4 @@ It is possible to loop over the letters in a word the same as items in an array.
 When the word on the screen has no more underscores and is equal to the randomly selected word, the user has won. You may create a separate variable for the underscore-obscured word, or simply select the textContent of the HTML element displaying the underscored word when comparing.
 
 You'll likely be using a number of global variables to track the game state (current word, remaining guesses, incorrect letters, etc.). When the user runs out of guesses or correctly guesses the word, a new word should be chosen and some of the variables should be reset. It might be helpful to create a "newGame" function to reset some of the global variables that can be called when the game needs to reset for a new word.
-*/
-
-/*
--- PSEUDOCODE FOR WORD GUESS GAME --
-#CHOOSE RANDOM WORD
-# The chosen word only includes letters (no numbers, symbols, or whitespace).
-# The chosen word should be randomly selected from a word bank.
-word_bank = ["hello", "goodbye", "bananas", "apples", "billboard", "puppies"]
-chosen_word = word_bank.sample
-puts chosen_word
-
-#SHOW WORD PROGRESS
-# Each round the word is displayed (e.g. Word: __mm_t)
-# Guessed letters are unmasked.
-# Hidden letters are shown as underscores.
-
-#SHOW REMAINING GUESSES
-# Each round display the number of chances remaining.
-# Display Chances remaining: CHANCES where CHANCES is an integer.
-
-#PROMPT FOR GUESS
-# Each round, the player is prompted for input.
-# The player's input should appear on the same line (no newline after the prompt).
-
-#GUESS LETTER OR WORD
-# When a player enters a single character, it guesses a letter.
-# When a player enters more than a single character, it guesses the word.
-
-#CHECK GUESSED LETTERS
-# If the guessed letter is within the word, those letters are unveiled.
-# Display the number of times the letter is found when it is present.
-# If the guessed letter is not within the word, subtract one from the chances remaining.
-# The user is alerted if the guess is not found.
-# If the guessed letter was already submitted, do not decrement the chances remaining.
-# Display an error message if the letter was already guessed.
-
-#CHECK GUESSED WORD
-# If the guessed word matches the hidden word, the player wins the game.
-# Output a congratulatory message if the guess was correct.
-# If the guessed word does not match the hidden word, the player loses the game.
-# Output an apologetic message if the guess was incorrect.
-
-#GAME OVER WHEN NO MORE CHANCES
-# The game ends when the number of chances remaining reaches zero.
-# The user is alerted that they have run out of guesses
-# Create newGame function to reset global variables to start a new game
 */
