@@ -31,18 +31,25 @@ var wordToGuess = document.getElementById("word-to-guess")
 var wordDisp = document.getElementById('words')
 var remainingGuesses = document.getElementById("remaining-guesses")
 
-// on page load, select a word at random from words array 
-window.onload = function(pageLoad)
+// select a word at random from words array 
+var randomWord = words[Math.floor(Math.random() * words.length)]
+
+// place randomly generated word into the #word-to-guess element
+wordToGuess.textContent = randomWord
+
+/*
+// display letters as underscores FAIL
+wordDisp.textContent = wordToGuess.replace(/[a-z]/g, '_');
+
+// display 10 remaining guesses in the #remaining-guesses element FAIL
+var counter = 0;
+while (counter < 10)
 {
-  var randomWord = pageLoad.words[Math.floor(Math.random() * words.length)]
-  // place randomly generated word into the #word-to-guess element
-  wordToGuess.textContent = randomWord
-  // display letters as underscores
-  wordDisp.textContent = words.replace(/\s+/g, "_");
-  // display 10 remaining guesses in the #remaining-guesses element
-  remainingGuesses.textContent = 10
-  
+  counter++;
+  if (userInput == )
 }
+remainingGuesses.textContent = 
+  
 
 /*
 // filter keypresses
