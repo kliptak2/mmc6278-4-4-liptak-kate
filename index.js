@@ -13,34 +13,44 @@ var words = [
 ]
 
 // list global variables
-var previousWord =     // where do I pull this from?
+var previousWord = ""    // where do I pull this from?
 var previousWordEl = document.getElementById("previous-word")
-var incorrectLetters = [
-
-]
+var incorrectLetters = []
 var incorrectLettersEl = document.getElementById("incorrect-letters")
-var correctLetters = [
-
-]
 var remainingGuesses = 10     // is this right?
 var remainingGuessesEl = document.getElementById("remaining-guesses")
 var wins = 0
 var losses = 0
 var winsEl = document.getElementById(wins)
 var lossesEl = document.getElementById(losses)
-var wordToGuess = 
+var wordToGuess = ""
 var wordToGuessEl = document.getElementById("word-to-guess")
-var wordDisp = 
-var wordDispEl = document.getElementById('words')
+var wordToGuessIndivLetters = []
+var wordDisp = ""
 
-// select a word at random from words array 
+function generateWord(){
+  // select a word at random from words array 
 var randomWord = words[Math.floor(Math.random() * words.length)]
+// save original word
+wordToGuess = randomWord
+// break randomWord into indiv letters
+wordToGuessIndivLetters = randomWord.split("")     // .split("") breaks the word into every indiv character 
+// replace letters with underscores
+var underscores = randomWord.replace(/[a-z]/g, '_');
+// display on screen
+displayToScreen()
+}
+function displayToScreen(){
+
+}
+
 
 // place randomly generated word into the #word-to-guess element
 wordToGuessEl.textContent = randomWord
 
 // display letters as underscores
-wordDispEl.textContent = wordToGuessEl.replace(/[a-z]/g, '_');    //Why does this fail?
+    //Why does this fail?
+console.log(randomWord,underscores)
 
 // filter keypresses
 document.onkeyup = function(userEvent)
@@ -70,7 +80,7 @@ document.onkeyup = function(userEvent)
 // How many functions do I need? Is this the right approach? One for userEvent, one for score, and one for ressetting the game?
 function score()
 {
-  if (remainingGuesses = 0 || /*?*/ */)   // how do I capture if the word has been solved?
+  if (remainingGuesses = 0)   // how do I capture if the word has been solved?
   {
     // increase losses by 1
     losses++
