@@ -17,31 +17,29 @@ var previousWord = ""
 var previousWordEl = document.getElementById("previous-word")
 var incorrectLettersArr = []
 var incorrectLettersEl = document.getElementById("incorrect-letters")
-var remainingGuesses = 10     // is this right?
+var remainingGuesses = 10
 var remainingGuessesEl = document.getElementById("remaining-guesses")
 var wins = 0
-var losses = 0
 var winsEl = document.getElementById("wins")
+var losses = 0
 var lossesEl = document.getElementById("losses")
 var wordToGuess = ""
 var wordToGuessEl = document.getElementById("word-to-guess")
-var wordToGuessIndivLetters = []
+var wordToGuessIndivLettersArr = []
 var wordDisp = ""
+var wordDispArr = []
 
 function generateWord(){
-  // select a word at random from words array 
-var randomWord = words[Math.floor(Math.random() * words.length)]
-// save original word
-wordToGuess = randomWord
-// break randomWord into indiv letters
-wordToGuessIndivLetters = randomWord.split("")     // .split("") breaks the word into every indiv character 
-// replace letters with underscores
-var underscores = randomWord.replace(/[a-z]/g, '_');
+var randomWord = words[Math.floor(Math.random() * words.length)]     // select a word at random from words array 
+wordToGuess = randomWord                                             // save original word
+wordToGuessIndivLettersArr = randomWord.split("")                    // break randomWord into indiv letters. Having split value set to empty ("") splits the word after each character. (Alt: use .split("-") to split a phone # after every dash.)
+var underscores = randomWord.replace(/[a-z]/g, '_');                 // replace letters with underscores
 wordDisp = underscores
-// display on screen
-displayToScreen()
+wordDispArr = underscores.split("")                                  // makes each underscore an indiv element
+displayToScreen()                                                    // display underscores on screen. Run displayToScreen function
 }
-function displayToScreen(){
+
+function displayToScreen(){                                          // puts everything to be displayed in one place
   wordToGuessEl.innerHTML = wordDisp
   previousWordEl.innerHTML = previousWord
   incorrectLettersEl.innerHTML = incorrectLettersArr
@@ -50,70 +48,53 @@ function displayToScreen(){
   lossesEl.innerHTML = losses
 }
 
-
-// // place randomly generated word into the #word-to-guess element
-// wordToGuessEl.textContent = randomWord
-
-// // display letters as underscores
-//     //Why does this fail?
-// console.log(randomWord,underscores)
-
-
-// filter keypresses
-document.onkeyup = function(event)
-{
-  var key = event.key.toLowerCase()     // getting key and making it lowercase (to fix uppercase entries)
-  // check if what they typed is a letter
-  if (/^[a-z]$/i.test(key) == false || incorrectLettersArr.includes(key)){     // if key is not a letter or if key is in incorrectLetters, stop function
+document.onkeyup = function(event){                                            // filter keypresses. function(event) = example of an anonymous function
+  var key = event.key.toLowerCase()                                            // getting key and making it lowercase (to fix uppercase entries)
+  if (/^[a-z]$/i.test(key) == false || incorrectLettersArr.includes(key)){     // check if key is a letter. If key is not a letter or if key is in incorrectLettersArr, stop function (aka return)
     return
   }
-  // compare it to the word
-  if(wordToGuess.includes(key)){
-
-  } else {     // handle incorrect guess
-    // remove 1 remainingGuess & add key to incorrectLettersArr
-    remainingGuesses--
-    incorrectLettersArr.push(key)
-  }
-
   
+  if(wordToGuess.includes(key)){                                    // compare key to the word
+    for (var i = 0; i < wordToGuessIndivLettersArr.length; i++)     // check how many times letter is in the word. For loops have 3 steps: 1) set starting point (array starts at 0), 2) set stopping point (length start at 1), and 3) define what action should happen until stopping point is reached. Since array starts at 0 and length starts at 1, can't make i <= because it would loop one too many times.
+    {
+      if (wordToGuessIndivLettersArr[i] == key){                    // for every item in array, does it = key?
+        wordDispArr[i] = key                                        // wordDispArr at position i becomes key (i = the index of the letter, not the letter itself (aka the address))
+      }
+    }
+    wordDisp = wordDispArr.join("")                                 // removes commas from the array (ex. _,_,_,)
+
+  } else {                                                          // handle incorrect guess
+    remainingGuesses--                                              // remove 1 remainingGuess
+    incorrectLettersArr.push(key)                                   // add key to incorrectLettersArr
+  }
+  score()                                                           // call score function
+  displayToScreen()                                                 // call displayToScreen function
 }
 
-// How many functions do I need? Is this the right approach? One for userEvent, one for score, and one for ressetting the game?
 function score()
 {
-  if (remainingGuesses = 0)   // how do I capture if the word has been solved?
+  var gameOver = false
+  if (remainingGuesses == 0)
   {
-    // increase losses by 1
-    losses++
-    lossesEl.textContent = losses
+    losses++                          // increase losses by 1
+    gameOver = true
   }
-  else
+  if (!wordDispArr.includes("_"))     // if wordDispArr doesn't have any underscores, then we've found every letter. = win
   {
-    // increase wins by 1
     wins++
-    winsEl.textContent = wins
+    gameOver = true
   }
-
+  if (gameOver == true)
+  {
+    newGame()                        // call newGame function
+  }
 }
 
-function newGame()  // What should I use to trigger this? If wins or losses increases?
-{
-  //generate new word
-  //reset remainingGuesses to 10
-  // show previous word
+function newGame(){
+  previousWord = wordToGuess        // put wordToGuess in previous
+  incorrectLettersArr = []          // empty out incorrectLettersArr
+  remainingGuesses = 10             // reset remainingGuesses to 10
+  generateWord()                    // generate new word. Runs generateWord function
 }
 
-document.onload = generateWord()
-/*
-PROF TIPS
-#Both arrays and strings have an "includes" method that return true/false.
-
-#It may be helpful to create arrays for incorrect letters AND correct letters.
-
-#It is possible to loop over the letters in a word the same as items in an array.
-
-#When the word on the screen has no more underscores and is equal to the randomly selected word, the user has won. You may create a separate variable for the underscore-obscured word, or simply select the textContent of the HTML element displaying the underscored word when comparing.
-
-#You'll likely be using a number of global variables to track the game state (current word, remaining guesses, incorrect letters, etc.). When the user runs out of guesses or correctly guesses the word, a new word should be chosen and some of the variables should be reset. It might be helpful to create a "newGame" function to reset some of the global variables that can be called when the game needs to reset for a new word.
-*/
+document.onload = generateWord()    // on document load, run generateWord function
