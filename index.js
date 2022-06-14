@@ -56,7 +56,7 @@ document.onkeyup = function(userEvent)
   }
   else
   {
-    // add letter to correctLetters array     //how do I do this?
+    // add letter to incorrectLetters array     //how do I do this?
     //add add incorrectLetter to #incorrect-letters element
     incorrectLettersEl.textContent = incorrectLetters
 
