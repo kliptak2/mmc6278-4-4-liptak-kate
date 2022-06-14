@@ -13,16 +13,16 @@ var words = [
 ]
 
 // list global variables
-var previousWord = ""    // where do I pull this from?
+var previousWord = ""
 var previousWordEl = document.getElementById("previous-word")
-var incorrectLetters = []
+var incorrectLettersArr = []
 var incorrectLettersEl = document.getElementById("incorrect-letters")
 var remainingGuesses = 10     // is this right?
 var remainingGuessesEl = document.getElementById("remaining-guesses")
 var wins = 0
 var losses = 0
-var winsEl = document.getElementById(wins)
-var lossesEl = document.getElementById(losses)
+var winsEl = document.getElementById("wins")
+var lossesEl = document.getElementById("losses")
 var wordToGuess = ""
 var wordToGuessEl = document.getElementById("word-to-guess")
 var wordToGuessIndivLetters = []
@@ -37,43 +37,45 @@ wordToGuess = randomWord
 wordToGuessIndivLetters = randomWord.split("")     // .split("") breaks the word into every indiv character 
 // replace letters with underscores
 var underscores = randomWord.replace(/[a-z]/g, '_');
+wordDisp = underscores
 // display on screen
 displayToScreen()
 }
 function displayToScreen(){
-
+  wordToGuessEl.innerHTML = wordDisp
+  previousWordEl.innerHTML = previousWord
+  incorrectLettersEl.innerHTML = incorrectLettersArr
+  remainingGuessesEl.innerHTML = remainingGuesses
+  winsEl.innerHTML = wins
+  lossesEl.innerHTML = losses
 }
 
 
-// place randomly generated word into the #word-to-guess element
-wordToGuessEl.textContent = randomWord
+// // place randomly generated word into the #word-to-guess element
+// wordToGuessEl.textContent = randomWord
 
-// display letters as underscores
-    //Why does this fail?
-console.log(randomWord,underscores)
+// // display letters as underscores
+//     //Why does this fail?
+// console.log(randomWord,underscores)
+
 
 // filter keypresses
-document.onkeyup = function(userEvent)
+document.onkeyup = function(event)
 {
-  var key = userEvent.key.toLowerCase()     // filters out bad user entries
-  if (words.indexOf(key) == -1) return     // if key is not in words array, return will stop rest of function from running
-  if (key === randomWord)     // is this right? If I need a for loop to loop over the letters in randomWord, where do I put it?
-  {
-    // change underscore to display letter
-    wordDispEl.textContent = wordToGuessEl.replace(/_/g, key);     // Why is this wrong?
-    // add letter to correctLetters array     //how do I do this?
-
+  var key = event.key.toLowerCase()     // getting key and making it lowercase (to fix uppercase entries)
+  // check if what they typed is a letter
+  if (/^[a-z]$/i.test(key) == false || incorrectLettersArr.includes(key)){     // if key is not a letter or if key is in incorrectLetters, stop function
+    return
   }
-  else
-  {
-    // add letter to incorrectLetters array     //how do I do this?
-    //add add incorrectLetter to #incorrect-letters element
-    incorrectLettersEl.textContent = incorrectLetters
+  // compare it to the word
+  if(wordToGuess.includes(key)){
 
-    //decrease remainingGuesses by 1
-    remainingGuesses --
-
+  } else {     // handle incorrect guess
+    // remove 1 remainingGuess & add key to incorrectLettersArr
+    remainingGuesses--
+    incorrectLettersArr.push(key)
   }
+
   
 }
 
@@ -102,7 +104,7 @@ function newGame()  // What should I use to trigger this? If wins or losses incr
   // show previous word
 }
 
-
+document.onload = generateWord()
 /*
 PROF TIPS
 #Both arrays and strings have an "includes" method that return true/false.
